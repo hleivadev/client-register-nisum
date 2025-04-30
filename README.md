@@ -34,7 +34,7 @@ http://localhost:8080
 
 ---
 
-## 📬 Registro de Usuario (POST `/api/users/register`)
+## 📬 Registro de Usuario (POST `/api/v1/users/register`)
 
 ### 📝 Request body:
 
@@ -121,9 +121,24 @@ Incluye pruebas unitarias con Mockito para el `UserService`.
 
 ---
 
-## 🧱 Diagrama
+🧱 Estructura del Proyecto (Arquitectura Hexagonal)
 
-Consulta el archivo `client-register.pdf` para ver el diagrama general de la arquitectura (controlador → servicio → repositorio → entidad).
+client-register/
+├── application/
+│   └── service/               # Lógica de negocio (casos de uso)
+├── domain/
+│   └── model/                 # Entidades y objetos de dominio
+├── infrastructure/
+│   ├── adapter/
+│   │   ├── controller/        # Controladores REST (entrada)
+│   │   └── repository/        # Adaptadores de persistencia (salida)
+│   └── config/                # Configuración general (security, swagger, etc.)
+├── ClientRegisterApplication.java
+🔄 Flujo
+Controller (Entrada): Recibe la petición.
+Service (Aplicación): Ejecuta la lógica de negocio.
+Repository (Salida): Interactúa con la base de datos.
+Entities (Dominio): Contienen las reglas del negocio.
 
 ---
 

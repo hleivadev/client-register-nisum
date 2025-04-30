@@ -7,6 +7,13 @@ import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.License;
 
+/**
+ * Configuracion class para SwaggerConfig.
+ * Esta clase se utiliza para configurar la documentacion de la aplicacion.
+ * 
+ * Configuration class for SwaggerConfig.
+ * This class is used to configure the documentation of the application.
+ */
 @Configuration
 public class SwaggerConfig {
      @Bean

@@ -12,6 +12,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+/**
+ * User entity class representing a user in the system.
+ * 
+ * Esta clase representa la entidad de usuario en el sistema.
+ * 
+ * @author Hleiva
+ */
 @Entity
 @Table(name = "users")
 public class User {

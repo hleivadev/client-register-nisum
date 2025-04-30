@@ -7,6 +7,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Configuracion class para Spring Security.
+ * Esta clase se utiliza para configurar la seguridad de la aplicacion.
+ * 
+ * Configuration class for Spring Security.
+ * This class is used to configure the security of the application.
+ */
 @Configuration
 public class SecurityConfig {
     
@@ -20,7 +27,8 @@ public class SecurityConfig {
                     "/v3/api-docs/**",
                     "/swagger-resources/**",
                     "/swagger-ui.html",
-                    "/webjars/**"
+                    "/webjars/**",
+                    "/api/v1/users/register"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

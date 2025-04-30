@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class UserService {
+public class UserService implements IUserService{
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;

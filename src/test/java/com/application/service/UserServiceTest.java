@@ -19,6 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.nisum.test_jwt.client_register.application.service.UserService;
@@ -35,6 +36,7 @@ public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Autowired
     private UserService userService;
 
     @Mock

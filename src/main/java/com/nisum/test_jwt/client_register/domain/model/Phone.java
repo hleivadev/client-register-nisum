@@ -7,6 +7,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * Phone entity class representing a phone number associated with a user.
+ * 
+ * Esta clase representa la entidad de teléfono asociada a un usuario.
+ * 
+ * @author Hleiva
+ */
 @Entity
 @Table(name = "phones")
 public class Phone {

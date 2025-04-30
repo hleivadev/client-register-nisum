@@ -11,12 +11,14 @@ import com.nisum.test_jwt.client_register.application.service.UserService;
 import com.nisum.test_jwt.client_register.infrastructure.adapter.rest.dto.UserRequestDto;
 import com.nisum.test_jwt.client_register.infrastructure.adapter.rest.dto.UserResponseDto;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
+@Tag(name = "User API", description = "Operaciones para registro de usuarios")
 public class UserController {
 
     // inyeccion de servicio userService || injection of userService
@@ -32,7 +34,7 @@ public class UserController {
      * @param request
      * @return ResponseEntity<UserResponseDto>
      */
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<UserResponseDto> registerUser(@Valid @RequestBody UserRequestDto request) {
         log.debug("Iniicio controller registerUser() || Start controller registerUser()");
         UserResponseDto response = userService.registerUser(request);
