@@ -142,6 +142,51 @@ Entities (Dominio): Contienen las reglas del negocio.
 
 ---
 
+-- Script SQL para base de datos H2 (client-register)
+
+DROP TABLE IF EXISTS PHONE;
+DROP TABLE IF EXISTS USER;
+
+CREATE TABLE USER (
+    id UUID PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created TIMESTAMP NOT NULL,
+    modified TIMESTAMP NOT NULL,
+    last_login TIMESTAMP NOT NULL,
+    is_active BOOLEAN NOT NULL,
+    token VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE PHONE (
+    id IDENTITY PRIMARY KEY,
+    number VARCHAR(20) NOT NULL,
+    city_code VARCHAR(10) NOT NULL,
+    country_code VARCHAR(10) NOT NULL,
+    user_id UUID NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES USER(id) ON DELETE CASCADE
+);
+
+-- Datos de prueba para tests
+INSERT INTO USER (id, name, email, password, created, modified, last_login, is_active, token)
+VALUES (
+    RANDOM_UUID(),
+    'Usuario Test',
+    'test@correo.com',
+    'encryptedpassword',
+    CURRENT_TIMESTAMP(),
+    CURRENT_TIMESTAMP(),
+    CURRENT_TIMESTAMP(),
+    TRUE,
+    'fake-jwt-token'
+);
+
+INSERT INTO PHONE (number, city_code, country_code, user_id)
+SELECT '1234567', '1', '57', id FROM USER WHERE email = 'test@correo.com';
+
+----
+
 ## 🧾 Licencia
 
 MIT © 2025 - Héctor Leiva (https://github.com/hleivadev)
