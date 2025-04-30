@@ -18,9 +18,23 @@ public class UserRequestDto {
     @Email(message = "El formato del correo es inválido || the format is wrong")
     private String email;
 
-    @NotBlank(message = "La contraseña es obligatoria || the email is obligatory")
+    @NotBlank(message = "La contraseña es obligatoria || the password is obligatory")
     private String password;
 
     @NotEmpty(message = "Debe existir al menos un teléfono || must be at least a number phone")
     private List<PhoneDto> phones;
+
+    // Default constructor
+    public UserRequestDto() {
+    }
+
+    // Constructor with parameters
+    public UserRequestDto(String name, String email, String password, List<PhoneDto> phones) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phones = phones;
+    }
+
+    
 }

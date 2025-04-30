@@ -7,8 +7,23 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * JpaUserRepository interface para User entity.
+ * extiende JpaRepository para proporcionar operaciones CRUD y métodos de consulta personalizados.
+ * 
+ * JpaUserRepository interface for User entity.
+ * It extends JpaRepository to provide CRUD operations and custom query methods.
+ */
 public interface JpaUserRepository extends JpaRepository<User, UUID>, UserRepository {
 
+    /**
+     * Find a User by email. 
+     *
+     * encuentra un User por email.
+     * 
+     * @param email the email of the User
+     * @return an Optional containing the User if found, or empty if not found
+     */
     @Override
     Optional<User> findByEmail(String email);
 
