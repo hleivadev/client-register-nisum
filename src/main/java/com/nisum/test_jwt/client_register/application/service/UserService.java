@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class UserService implements IUserService{
+public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
@@ -48,58 +48,68 @@ public class UserService implements IUserService{
      */
     @Transactional
     public UserResponseDto registerUser(UserRequestDto request) {
-        log.info("Inicio method registerUser: Registrando usuario ");
+        log.info("Inicio method registerUser: Registrando usuario con email: {}", request.getEmail());
 
+        try {
+            // Validar si el email ya existe
+            userRepository.findByEmail(request.getEmail())
+                    .ifPresent(u -> {
+                        log.warn("Intento de registro con email ya existente: {}", request.getEmail());
+                        throw new ConflictException("El correo ya registrado || email already exists");
+                    });
 
-        // Validar si el email ya existe || validation if email exist already
-        userRepository.findByEmail(request.getEmail())
-                .ifPresent(u -> {
-                    throw new ConflictException("El correo ya registrado || email already exist");
-                });
+            // Validar formato de password
+            if (!passwordPattern.matcher(request.getPassword()).matches()) {
+                log.warn("Contraseña con formato inválido para el email: {}", request.getEmail());
+                throw new BadRequestException("La contraseña no cumple con el formato requerido");
+            }
 
-        // Validar formato de password || validation password format
-        if (!passwordPattern.matcher(request.getPassword()).matches()) {
-            throw new BadRequestException(
-                    "La contraseña no cumple con el formato requerido || Password doesnt have the correct format");
+            // Crear nuevo usuario
+            User user = new User();
+            user.setId(UUID.randomUUID());
+            user.setName(request.getName());
+            user.setEmail(request.getEmail());
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            user.setCreated(LocalDateTime.now());
+            user.setModified(LocalDateTime.now());
+            user.setLastLogin(LocalDateTime.now());
+            user.setIsActive(true);
+
+            // Generar token
+            String token = jwtUtil.generateToken(user.getEmail());
+            user.setToken(token);
+
+            // Setear teléfonos
+            user.setPhones(request.getPhones().stream()
+                    .map(this::toPhone)
+                    .collect(Collectors.toList()));
+
+            // Guardar usuario
+            User savedUser = userRepository.save(user);
+
+            log.info("Usuario registrado exitosamente con email: {}", savedUser.getEmail());
+
+            return UserResponseDto.builder()
+                    .id(savedUser.getId())
+                    .created(savedUser.getCreated())
+                    .modified(savedUser.getModified())
+                    .lastLogin(savedUser.getLastLogin())
+                    .isActive(savedUser.getIsActive())
+                    .token(savedUser.getToken())
+                    .email(savedUser.getEmail())
+                    .name(savedUser.getName())
+                    .phones(savedUser.getPhones().stream()
+                            .map(this::toPhoneDto)
+                            .collect(Collectors.toList()))
+                    .build();
+
+        } catch (ConflictException | BadRequestException e) {
+            log.warn("Error funcional en registro: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("Error inesperado al registrar usuario con email: {}", request.getEmail(), e);
+            throw new RuntimeException("Error interno al registrar usuario");
         }
-
-        // Crear usuario || create user
-        User user = new User();
-        user.setId(UUID.randomUUID());
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setCreated(LocalDateTime.now());
-        user.setModified(LocalDateTime.now());
-        user.setLastLogin(LocalDateTime.now());
-        user.setIsActive(true);
-
-        // Generar token || token generate
-        String token = jwtUtil.generateToken(user.getEmail());
-        user.setToken(token);
-
-        user.setPhones(request.getPhones().stream()
-                .map(phoneDto -> new Phone(phoneDto.getNumber(), phoneDto.getCityCode(), phoneDto.getCountryCode())) // ejemplo de uso de stream().map() and collect() || example of use of stream().map() and collect()
-                .collect(Collectors.toList()));
-
-        // Guardar usuario || save user
-        User savedUser = userRepository.save(user);
-
-        // Retornar respuesta || response returned
-        return UserResponseDto.builder()
-                .id(savedUser.getId())
-                .created(savedUser.getCreated())
-                .modified(savedUser.getModified())
-                .lastLogin(savedUser.getLastLogin())
-                .isActive(savedUser.getIsActive())
-                .token(savedUser.getToken())
-                .email(savedUser.getEmail())
-                .name(savedUser.getName())
-                .phones(savedUser.getPhones().stream()
-                        .map(this::toPhoneDto)// ejemplo de uso de metodo toPhoneDto || example of use of method toPhoneDto
-                        .collect(Collectors.toList()))
-                .build();
-
     }
 
     /**

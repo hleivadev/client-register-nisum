@@ -4,7 +4,6 @@ package com.application.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nisum.test_jwt.client_register.application.service.UserService;
 import com.nisum.test_jwt.client_register.config.TestSecurityConfig;
-import com.nisum.test_jwt.client_register.infrastructure.adapter.rest.controller.UserController;
 import com.nisum.test_jwt.client_register.infrastructure.adapter.rest.dto.PhoneDto;
 import com.nisum.test_jwt.client_register.infrastructure.adapter.rest.dto.UserRequestDto;
 import com.nisum.test_jwt.client_register.infrastructure.adapter.rest.dto.UserResponseDto;
@@ -18,11 +17,11 @@ import org.mockito.Mockito;
 import static org.mockito.ArgumentMatchers.any;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -33,8 +32,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@WebMvcTest(UserController.class)
-@ContextConfiguration(classes = com.nisum.test_jwt.client_register.ClientRegisterApplication.class)
+@SpringBootTest(classes = com.nisum.test_jwt.client_register.ClientRegisterApplication.class)
+@AutoConfigureMockMvc
 @Import(TestSecurityConfig.class)
 public class UserControllerTest {
 
