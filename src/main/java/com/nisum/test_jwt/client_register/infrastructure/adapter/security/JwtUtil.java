@@ -1,5 +1,6 @@
 package com.nisum.test_jwt.client_register.infrastructure.adapter.security;
 
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -39,6 +40,28 @@ public class JwtUtil {
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS256) // algorithm used for signing the token using SHA-256 || algoritmo utilizado para firmar el token con SHA-256
                 .compact();
+    }
+    // Extrae el email (subject) desde un token JWT
+    public String extractUsername(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+
+    // Valida que el token sea correcto y no esté expirado
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
     
 }

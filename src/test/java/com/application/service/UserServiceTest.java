@@ -33,6 +33,9 @@ import com.nisum.test_jwt.client_register.infrastructure.adapter.rest.dto.UserRe
 import com.nisum.test_jwt.client_register.infrastructure.adapter.security.JwtUtil;
 
 public class UserServiceTest {
+
+    public static final String EMAIL_ALREADY_EXISTS = "El correo ya registrado || email already exists";
+
     @Mock
     private UserRepository userRepository;
 
@@ -165,7 +168,7 @@ public class UserServiceTest {
             userService.registerUser(request);
         });
 
-        assertEquals("El correo ya registrado || email already exist", exception.getMessage());
+        assertEquals(EMAIL_ALREADY_EXISTS, exception.getMessage());
         verify(userRepository, times(1)).findByEmail(emailDuplicado);
         verify(userRepository, never()).save(any(User.class));
     }
