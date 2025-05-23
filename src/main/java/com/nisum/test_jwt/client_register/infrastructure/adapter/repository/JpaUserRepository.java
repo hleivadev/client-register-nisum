@@ -3,6 +3,7 @@ package com.nisum.test_jwt.client_register.infrastructure.adapter.repository;
 import com.nisum.test_jwt.client_register.domain.model.User;
 import com.nisum.test_jwt.client_register.domain.repository.UserRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import java.util.UUID;
  * JpaUserRepository interface for User entity.
  * It extends JpaRepository to provide CRUD operations and custom query methods.
  */
+@Repository
 public interface JpaUserRepository extends JpaRepository<User, UUID>, UserRepository {
 
     /**
